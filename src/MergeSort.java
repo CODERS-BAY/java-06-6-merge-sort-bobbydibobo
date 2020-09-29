@@ -1,57 +1,67 @@
-import java.util.Arrays;
-import java.util.Scanner;
+
 
 public class MergeSort {
 
-    public static void main(String[] args) {
-
-        int[] unsortedArray = {1,23,493,2130,7};
+    public static void main( String args[] ) {
 
 
-        mergesort(unsortedArray);
-        System.out.println("Sorted Array: " + Arrays.toString(unsortedArray));
+        int[] arraytoSort = {18, 3, 12, 67, 5, 15, 45, 122, 78};
+        System.out.println("Unsorted Array:");
+        for(int i = 0; i < arraytoSort.length;i++){
+            System.out.print(arraytoSort[i] + " ");
+        }
 
+        mergeSort(arraytoSort, arraytoSort.length);
+
+        System.out.println();
+        System.out.println("Sorted Array:");
+        for (int i = 0; i < arraytoSort.length; ++i) {
+            System.out.print(arraytoSort[i] + " ");
+        }
     }
 
-    private static int[] mergesort(int[] unsortedArray) {
+    public static void merge(int[] uArrayLeft,int[] uArrayRight, int[] unsortedArray,int leftExtent, int rightExtent){
 
-        if(unsortedArray.length == 1){
-            return unsortedArray;
-        }
+        int i=0,l=0,r = 0;
 
-        int [] sortedArrayOne = new int[(int) Math.floor(unsortedArray.length/2)];
-        int [] sortedArrayTwo = new int[(int) Math.ceil(unsortedArray.length/2)];
+        while(l<leftExtent && r<rightExtent){
 
-        for ( int i = 0; i < unsortedArray.length; i++){
-            if ( i < (int) Math.floor(unsortedArray.length/2)){
-                sortedArrayOne[i] = unsortedArray[i];
-            } else {
-                sortedArrayTwo[i - (int) Math.floor(unsortedArray.length/2)] = unsortedArray[i];
+            if(uArrayLeft[l]<uArrayRight[r]){
+                unsortedArray[i++] = uArrayLeft[l++];
+            }
+            else{
+                unsortedArray[i++] = uArrayRight[r++];
             }
         }
-
-        sortedArrayOne = mergesort(sortedArrayOne);
-        sortedArrayTwo = mergesort(sortedArrayTwo);
-
-        return merge (sortedArrayOne, sortedArrayTwo);
+        while(l<leftExtent){
+            unsortedArray[i++] = uArrayLeft[l++];
+        }
+        while(r<rightExtent){
+            unsortedArray[i++] = uArrayRight[r++];
+        }
     }
 
-    private static int[] merge(int[] sortedArrayOne, int[] sortedArrayTwo) {
+    public static void mergeSort(int [] newArray, int length){
+        if (length < 2){
+            return;
+        }
 
-        int[] mergeArray = new int[sortedArrayOne.length + sortedArrayTwo.length];
+        int midOfArray = length / 2;
+        int [] ArrayLeft = new int[midOfArray];
+        int [] ArrayRight = new int[length-midOfArray];
 
-        int counterOne = 0;
-        int counterTwo = 0;
-
-        for (int i = 0; i < sortedArrayOne.length + sortedArrayTwo.length; i++){
-            if (sortedArrayOne[counterOne] <= sortedArrayTwo[counterTwo]){
-                mergeArray[i] = sortedArrayOne[counterOne];
-                counterOne++;
-            } else {
-                mergeArray[i] = sortedArrayTwo[counterTwo];
-
+        int k = 0;
+        for(int i = 0;i<length;++i){
+            if(i<midOfArray){
+                ArrayLeft[i] = newArray[i];
+            }
+            else{
+                ArrayRight[k] = newArray[i];
+                k = k+1;
             }
         }
-        return mergeArray;
+        mergeSort(ArrayLeft,midOfArray);
+        mergeSort(ArrayRight,length-midOfArray);
+        merge(ArrayLeft,ArrayRight,newArray,midOfArray,length-midOfArray);
     }
 }
